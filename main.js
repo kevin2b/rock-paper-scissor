@@ -10,16 +10,16 @@ const map = {
 playMatch();
 
 function playMatch(){
-  const playerChoice = document.querySelector(".player-choice");
+  const playerSelection = document.querySelector(".player-choice");
   let playerScore = 0;
   let computerScore = 0;
 
-  playerChoice.addEventListener("click", (event)=>{
-    let selected = getPlayerChoice(event);
+  playerSelection.addEventListener("click", (event)=>{
+    let playerChoice = getPlayerChoice(event);
 
-    if (selected !== undefined){
+    if (playerChoice !== undefined){
       const computerChoice = getComputerChoice();
-      const result = playRound(computerChoice, selected);
+      const result = playRound(computerChoice, playerChoice);
 
       //Update internal score
       if (result[0] === -1){
@@ -43,10 +43,8 @@ function playMatch(){
       else{
         logMessage(result[1], playerScore, computerScore);
       }
+      highlightSelection(computerChoice, playerChoice);
     }
-
-
-
   });
 }
 
@@ -62,6 +60,7 @@ function getPlayerChoice (event){
   }
 }
 
+//Updates message and score in UI
 function logMessage(message, playerScore, computerScore){
   const messageDOM = document.querySelector(".message");
   const playerScoreDOM = document.querySelector("#player-score");
@@ -70,6 +69,29 @@ function logMessage(message, playerScore, computerScore){
   messageDOM.textContent = message;
   playerScoreDOM.textContent = playerScore;
   cpuScoreDOM.textContent = computerScore;
+}
+
+//Highlights previous selected choices
+function highlightSelection(computerChoice, playerChoice){
+  const computerOptions = document.querySelectorAll(".cpu-choice .selection");
+  for (const choice of computerOptions){
+    if (choice.classList.contains(computerChoice)){
+      choice.classList.add("selected");
+    }
+    else{
+      choice.classList.remove("selected");
+    }
+  }
+
+  const playerOptions = document.querySelectorAll(".player-choice .selection");
+  for (const choice of playerOptions){
+    if (choice.classList.contains(playerChoice)){
+      choice.classList.add("selected");
+    }
+    else{
+      choice.classList.remove("selected");
+    }
+  }
 }
 
 //Choices should be "rock", "paper" or "scissor"
