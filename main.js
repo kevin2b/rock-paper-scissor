@@ -6,8 +6,10 @@ const map = {
   "paper": 1,
   "scissor": 2
 }
-console.log(getComputerChoice());
-console.log(getHumanChoice());
+
+let computerChoice = getComputerChoice();
+let humanChoice = getHumanChoice();
+console.log(playRound(computerChoice, humanChoice));
 
 function getComputerChoice(){
   //Generate a real number from [0,3)
@@ -27,4 +29,30 @@ function getHumanChoice(){
     answer = answer.toLowerCase();
   } while(map[answer] === undefined);
   return answer;
+}
+
+//Choices should be "rock", "paper" or "scissor"
+function playRound(computerChoice, humanChoice){
+  //Assume row represents computer choice, column human choice.
+  //rock = 0, paper = 1, scissor = 2. -1 means computer win, 0 is draw and 1 means player win
+  const resultMatrix = [[0,1,-1],
+                        [-1,0,1],
+                        [1,-1,0]];
+  
+  const result = resultMatrix[map[computerChoice]][map[humanChoice]];
+
+  computerChoice = capitalizeFirstLetter(computerChoice);
+  humanChoice = capitalizeFirstLetter(humanChoice);
+
+  if (result == -1){
+    return "You Lose! " + computerChoice + " beats " + humanChoice + ".";
+  }
+  if (result == 1){
+    return "You Win! " + humanChoice + " beats " + computerChoice + ".";
+  }
+  return "Draw! Both players chose " + computerChoice + ".";
+}
+
+function capitalizeFirstLetter(word){
+  return word.charAt(0).toUpperCase() + word.slice(1);
 }
