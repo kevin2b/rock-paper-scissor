@@ -20,15 +20,32 @@ function playMatch(){
     if (selected !== undefined){
       const computerChoice = getComputerChoice();
       const result = playRound(computerChoice, selected);
+
+      //Update internal score
       if (result[0] === -1){
         computerScore++;
       }
-
       if (result[0] === 1){
         playerScore++;
       }
-      logMessage(result[1], playerScore, computerScore);
+
+      //Check whether victory is decided and updates UI
+      if (playerScore === 5){
+        logMessage("You Win! Select to play again.", playerScore, computerScore);
+        playerScore = 0;
+        computerScore = 0;
+      }
+      else if (computerScore === 5){
+        logMessage("You Lost! Select to play again.", playerScore, computerScore);
+        playerScore = 0;
+        computerScore = 0;
+      }
+      else{
+        logMessage(result[1], playerScore, computerScore);
+      }
     }
+
+
 
   });
 }
