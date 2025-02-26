@@ -1,3 +1,35 @@
-body {
-  color: blue;
+html {
+  font-family: Arial, Helvetica, sans-serif, system-ui;
+  font-size: 24px;
+  background-color:aqua;
+
+  max-width: 600px;
+  min-width: 300px;
 }
+
+.title{
+  font-size: 2rem;
+}
+
+.title,
+.message,
+.score{
+  text-align: center;
+  margin: 10px 0;
+}
+
+.player-choice,
+.cpu-choice{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+button{
+  text-align: center;
+  padding: 10px 30px;
+  margin: 0px 100px;
+
+}
+
