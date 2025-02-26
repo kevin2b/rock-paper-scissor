@@ -9,47 +9,72 @@ const map = {
 
 playMatch();
 
-//Play rock, paper, scissor for 5 rounds.
 function playMatch(){
-  let score = 0;
-  for (let i = 0; i < 5; i++){
-    const computerChoice = getComputerChoice();
-    const humanChoice = getHumanChoice();
-    const result = playRound(computerChoice, humanChoice);
-    score += result[0];
-    console.log(result[1]);
+  const playerChoice = document.querySelector(".player-choice");
+  let playerScore = 0;
+  let computerScore = 0;
+
+  playerChoice.addEventListener("click", (event)=>{
+    let selected = getPlayerChoice(event);
+
+    if (selected !== undefined){
+      const computerChoice = getComputerChoice();
+      const result = playRound(computerChoice, selected);
+      if (result[0] === -1){
+        computerScore++;
+      }
+
+      if (result[0] === 1){
+        playerScore++;
+      }
+      logMessage(result[1], playerScore, computerScore);
+    }
+
+  });
+}
+
+function getPlayerChoice (event){
+  if (event.target.classList.contains("rock")){
+    return "rock";
   }
-  if (score > 0){
-    console.log("You win!")
+  if (event.target.classList.contains("paper")){
+    return "paper";
   }
-  if(score < 0){
-    console.log("You lose!")
+  if (event.target.classList.contains("scissor")){
+    return "scissor";
   }
-  if(score === 0){
-    console.log("Draw!");
-  }
+}
+
+function logMessage(message, playerScore, computerScore){
+  const messageDOM = document.querySelector(".message");
+  const playerScoreDOM = document.querySelector("#player-score");
+  const cpuScoreDOM = document.querySelector("#cpu-score");
+
+  messageDOM.textContent = message;
+  playerScoreDOM.textContent = playerScore;
+  cpuScoreDOM.textContent = computerScore;
 }
 
 //Choices should be "rock", "paper" or "scissor"
 //Returns an array with two values, first value is a number where -1 is a loss, 0 is a draw and 1 is a win
 //Second value is a game message regarding the result of the round
-function playRound(computerChoice, humanChoice){
-  //Assume row represents computer choice, column human choice.
+function playRound(computerChoice, playerChoice){
+  //Assume row represents computer choice, column player choice.
   //rock = 0, paper = 1, scissor = 2. -1 means computer win, 0 is draw and 1 means player win
   const resultMatrix = [[0,1,-1],
                         [-1,0,1],
                         [1,-1,0]];
   
-  const result = resultMatrix[map[computerChoice]][map[humanChoice]];
+  const result = resultMatrix[map[computerChoice]][map[playerChoice]];
 
   computerChoice = capitalizeFirstLetter(computerChoice);
-  humanChoice = capitalizeFirstLetter(humanChoice);
+  playerChoice = capitalizeFirstLetter(playerChoice);
 
   if (result == -1){
-    return [-1, "You Lose! " + computerChoice + " beats " + humanChoice + "."];
+    return [-1, "You Lose! " + computerChoice + " beats " + playerChoice + "."];
   }
   if (result == 1){
-    return [1, "You Win! " + humanChoice + " beats " + computerChoice + "."];
+    return [1, "You Win! " + playerChoice + " beats " + computerChoice + "."];
   }
   return [0, "Draw! Both players chose " + computerChoice + "."];
 }
@@ -61,17 +86,6 @@ function getComputerChoice(){
   //Round generated number to 0, 1 or 2 which represents rock, paper and scissor
   compSelect = Math.floor(compSelect);
   return dictionary[compSelect];
-}
-
-function getHumanChoice(){
-  let answer;
-
-  //Keep prompting user until they enter rock, paper or scissor case insensitive. Default rock.
-  do{
-    answer = prompt("Enter rock, paper or scissor", "rock");
-    answer = answer.toLowerCase();
-  } while(map[answer] === undefined);
-  return answer;
 }
 
 function capitalizeFirstLetter(word){
